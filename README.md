@@ -1,6 +1,6 @@
 # Reconnaissance de chiffres
 
-# Préparation
+## Préparation
 
 Récupérer le set de données
 
@@ -12,4 +12,4 @@ cd projet-chiffres
 tar -xzf chiffres.tar.gz
 ```
 
-Il ne reste plus qu'à coder :)
+Il ne reste plus qu'à suivre l'énoncé :)
