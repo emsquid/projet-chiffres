@@ -4,6 +4,12 @@
   set text(font: "New Computer Modern", lang: "fr")
   set par(justify: true)
   show math.equation: set text(weight: 400)
+  show raw.where(block: false): box.with(
+    fill: luma(240),
+    inset: (x: 3pt, y: 0pt),
+    outset: (y: 3pt),
+    radius: 2pt,
+)
 
   align(center)[#block(text(weight: 700, 1.75em, title))]
   linebreak()
@@ -24,12 +30,13 @@ pour ce qui est des images on pourra utiliser cette
 (Pour l'extraire : ```bash tar -xzf chiffres.tar.gz```)
 
 == Préparation :
-Avant de reconnaître des chiffres on doit pouvoir lire des images en Python.
-+ Tout d'abord on aura besoin d'une fonction pour lire une image depuis un fichier, 
+Avant de reconnaître des chiffres on doit pouvoir lire et manipuler des images en Python. 
+Dans toute la feuille on considére une image de largeur _*l*_ et de hauteur _*h*_.
++ Tout d'abord on aura besoin d'une fonction pour lire cette image depuis un fichier, 
   on pourra par exemple utiliser la classe ```python Image``` de la librairie ```python PIL```. \
   (Pour l'installer : ```bash pip3 install Pillow```) 
-+ Ensuite il faut une fonction pour passer d'une image à un élément simple à manipuler, 
-  on pourra la représenter comme une *matrice* de pixel 
++ Ensuite il faut une fonction pour passer de l'image à un objet simple à manipuler, 
+  on pourra la représenter comme une *matrice* de pixels 
   de taille $(1, bold(l) dot.op bold(h))$, 
   par exemple avec la librairie ```python numpy```. 
   On devra aussi transformer les couleurs 
@@ -42,11 +49,9 @@ Avant de reconnaître des chiffres on doit pouvoir lire des images en Python.
   la fonction ```python listdir(repertoire)``` de la librairie ```python os```)
 
 == Partie 1 : Les k plus proches voisins
-Dans cette partie on va considérer qu'une image de largeur _*l*_ et de hauteur _*h*_ 
-peut être représentée comme un *point* ou un *vecteur* 
-appartenant à $[bold(0), bold(1)]^(bold(l) dot.op bold(h))$.
-Ainsi en calculant la *distance* entre deux points 
-ou le *produit scalaire* de deux vecteurs, 
+Dans cette partie on va considérer une image comme un *point* ou un *vecteur* 
+de $[bold(0), bold(1)]^(bold(l) dot.op bold(h))$.
+Ainsi en calculant la *distance* entre deux points ou le *produit scalaire* de deux vecteurs, 
 on peut obtenir une mesure de la ressemblance d'une image à une autre 
 et utiliser la méthode des 
 #link("https://fr.wikipedia.org/wiki/M%C3%A9thode_des_k_plus_proches_voisins")[#text("k plus proches voisins.", fill: blue)]
@@ -67,6 +72,6 @@ et utiliser la méthode des
   On pourra comparer les deux méthodes et voir laquelle fonctionne le mieux. \
   
 
-== Partie 2: Un réseau neuronal
+== Partie 2: Un réseau neuronal basique
 TODO
 
