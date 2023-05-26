@@ -141,7 +141,7 @@ Ici on a fait 10 prédictions, avec $bold(m_k)^t$ la transposée.
 En répétant cette opération pour plusieurs groupes d'images 
 on améliore petit à petit nos paramètres et nos prédictions deviennent meilleures.
 
-7. Pour terminer on peut donc faire une fonction qui s'entraînent sur un ensemble d'images
+8. Pour terminer on peut donc faire une fonction qui s'entraînent sur un ensemble d'images
   en les séparant en petits groupes, on peut répéter cet entraînement plusieurs fois 
   et calculer le pourcentage de réussite pour chaque génération sur des images de test.
 
