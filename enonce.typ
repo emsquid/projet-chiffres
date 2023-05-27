@@ -92,7 +92,7 @@ et une matrice de biais _*b*_ de la forme $(1, 10)$. \
 
 Vous pouvez remarquer qu'en utilisant l'application affine 
 $bold(p) = bold(m) dot.op bold(W) + bold(b)$
-on peut obtenir la forme voulue. 
+on peut obtenir la forme voulue pour *p*. 
 
 2. On fait donc une fonction pour calculer ce résultat, 
   on pensera à faire attention à la forme de la matrice de sortie.
@@ -133,8 +133,8 @@ Tout en propageant le résultat, on veut aussi améliorer *W* et *b*,
 on va pouvoir utiliser le $Delta$ que l'on a calculé.
 
 6. On crée une fonction pour modifier nos deux paramètres : 
-  - Le changement $Delta bold(b)$ que reçoit *b* est simplement $alpha dot.op Delta$
-  - Le changement $Delta bold(W)$ que l'on fait à *W* est donné par $alpha dot.op bold(m)^t dot.op Delta$
+  - Le changement que reçoit *b* est simplement $bold(b) arrow.l bold(b) - alpha dot.op Delta$
+  - Le changement que l'on fait à *W* est donné par $bold(W) arrow.l bold(W) - alpha dot.op bold(m)^t dot.op Delta$
   Où $alpha$ représente la *vitesse d'apprentissage* (on pourra prendre $alpha$ entre 0 et 1),
   et $bold(m)^t$ est la transposée (pour que le produit matriciel soit possible).
 
