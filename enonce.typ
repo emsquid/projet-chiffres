@@ -81,16 +81,16 @@ et utiliser la méthode des
 
 == Partie 2 : Base d'un réseau neuronal
 Dans cette partie on va toujours utiliser l'image comme une matrice _*m*_,
-et on va vouloir calculer à partir de cette matrice une matrice de taille $1 times 10$, 
+et on va vouloir calculer à partir de celle-ci une *matrice* de taille $1 times 10$, 
 $bold(p) = mat(p_0, p_1, ..., p_8, p_9;)$,
-où $p_n in [0, 1]$ représente la probabilité que $n$ soit le chiffre de l'image. \
+où $p_n in [0, 1]$ représente la *probabilité* que $n$ soit le chiffre de l'image. \
 Pour ça on va utiliser deux matrices, 
 une matrice de poids _*W*_ de taille $bold(l) dot.op bold(h) times 10$ 
 et une matrice de biais _*b*_ de taille $1 times 10$. \
 
-1. On peut utiliser le module ```python random``` de la librairie ```python numpy```
-  pour initialiser *W* et *b* avec des distributions aléatoires, 
-  par exemple une distribution uniforme entre -1 et 1, à vous de trouver la meilleure.
+1. On commence par initialiser *W* et *b* avec des 0, 
+  on pourrait aussi utiliser des distributions aléatoires, 
+  à vous de voir ce qui fonctionne le mieux.
 
 Vous pouvez remarquer qu'en utilisant l'application affine 
 $bold(p) = bold(m) dot.op bold(W) + bold(b)$
@@ -100,7 +100,7 @@ on peut obtenir la taille voulue pour *p*.
   on pensera à faire attention à bien utiliser le produit matriciel 
   et à la taille de la matrice de sortie.
 
-Mais on a un premier problème, les valeurs de *p* ne sont pas dans l'intervalle $[0, 1]$
+Mais on a un problème, les valeurs de *p* ne sont pas dans l'intervalle $[0, 1]$
 et ne s'apparentent pas à des probabilités.
 
 3. Pour régler ça, on peut utiliser la fonction 
@@ -108,8 +108,8 @@ et ne s'apparentent pas à des probabilités.
   dont l'expression est $sigma(x) = 1 / (1 + e^(-x))$
   et l'appliquer à nos prédictions *p*.
 
-En plus, dans ce calcul *W* et *b* ne nous apportent pour l'instant aucune information, 
-il va falloir que notre réseau apprenne de ses erreurs.
+De plus, dans ce calcul *W* et *b* ne nous apportent pour l'instant aucune information, 
+il va falloir que notre réseau apprenne de ses erreurs pour que cela prenne du sens.
 Pour ça on va utiliser une 
 #link("https://fr.wikipedia.org/wiki/Fonction_objectif")[#text("fonction objectif", fill: blue)],
 ce type de fonction permet d'évaluer la qualité de nos prédictions, 
@@ -133,7 +133,7 @@ en retournant en arrière dans notre réseau neuronal.
   $bold(m) dot.op bold(W) + bold(b)$)
 
 Tout en propageant le résultat, on veut aussi améliorer *W* et *b*, 
-on va pouvoir utiliser $Delta$ que l'on a calculé.
+on va pouvoir utiliser $Delta$ après l'avoir calculé.
 
 6. On crée une fonction pour modifier nos deux paramètres : 
   - Le changement que reçoit *b* est simplement $bold(b) arrow.l bold(b) - alpha dot.op Delta$
@@ -149,7 +149,7 @@ En répétant cette opération pour plusieurs images
 on améliore petit à petit nos paramètres et nos prédictions deviennent meilleures.
 
 8. Pour terminer on peut donc faire une fonction qui s'entraînent sur un ensemble d'images, 
-  on peut répéter plusieurs fois en mélangeant les images
+  on peut répéter plusieurs fois en *mélangeant* les images
   et calculer le pourcentage de réussite pour chaque génération sur des images de test.
 
 En fonction de l'ensemble de base utilisé on peut rapidement arriver entre 80% et 90% de prédictions réussites.
