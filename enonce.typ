@@ -40,7 +40,7 @@ Dans toute la feuille on considére une image de largeur _*l*_ et de hauteur _*h
   (Pour l'installer : ```bash pip3 install Pillow```) 
 + Ensuite il faut une fonction pour passer de l'image à un objet plus simple à manipuler, 
   on pourra la représenter comme une *matrice* de pixels 
-  de la forme $(1, bold(l) dot.op bold(h))$, par exemple avec la librairie ```python numpy```. 
+  de taille $1 times bold(l) dot.op bold(h)$, par exemple avec la librairie ```python numpy```. 
   On devra aussi transformer les couleurs en une valeur dans $[bold(0), bold(1)]$. \ 
   (Remarque : On fera attention à ce que notre matrice soit bien 
   en 2 dimensions pour pouvoir utiliser le produit matriciel correctement)
@@ -83,8 +83,8 @@ et on va vouloir calculer à partir de cette matrice un vecteur de taille 10,
 $bold(p) = mat(p_0, p_1, ..., p_8, p_9;)$,
 où $p_n in [0, 1]$ représente la probabilité que $n$ soit le chiffre de l'image. \
 Pour ça on va utiliser deux matrices, 
-une matrice de poids _*W*_ de la forme $(bold(l) dot.op bold(h), 10)$ 
-et une matrice de biais _*b*_ de la forme $(1, 10)$. \
+une matrice de poids _*W*_ de taille $bold(l) dot.op bold(h) times 10$ 
+et une matrice de biais _*b*_ de taille $1 times 10$. \
 
 1. On peut utiliser le module ```python random``` de la librairie ```python numpy```
   pour initialiser *W* et *b* avec des distributions aléatoires, 
@@ -92,10 +92,11 @@ et une matrice de biais _*b*_ de la forme $(1, 10)$. \
 
 Vous pouvez remarquer qu'en utilisant l'application affine 
 $bold(p) = bold(m) dot.op bold(W) + bold(b)$
-on peut obtenir la forme voulue pour *p*. 
+on peut obtenir la taille voulue pour *p*. 
 
 2. On fait donc une fonction pour calculer ce résultat, 
-  on pensera à faire attention à la forme de la matrice de sortie.
+  on pensera à faire attention à bien utiliser le produit matriciel 
+  et à la taille de la matrice de sortie.
 
 Mais il y a deux problèmes, d'abord les valeurs de *p* ne sont pas dans l'intervalle $[0, 1]$,
 et dans ce calcul *W* et *b* ne nous apportent pour l'instant aucune information. 
@@ -130,7 +131,7 @@ en retournant en arrière dans notre réseau neuronal.
   $bold(m) dot.op bold(W) + bold(b)$)
 
 Tout en propageant le résultat, on veut aussi améliorer *W* et *b*, 
-on va pouvoir utiliser le $Delta$ que l'on a calculé.
+on va pouvoir utiliser $Delta$ que l'on a calculé.
 
 6. On crée une fonction pour modifier nos deux paramètres : 
   - Le changement que reçoit *b* est simplement $bold(b) arrow.l bold(b) - alpha dot.op Delta$
@@ -151,3 +152,5 @@ on améliore petit à petit nos paramètres et nos prédictions deviennent meill
 
 En fonction de l'ensemble de base utilisé on peut rapidement arriver entre 80% et 90% de prédictions réussites.
 En bonus on peut essayer de sauvegarder nos paramètres *W* et *b* lorsque le pourcentage de réussite augmente.
+
+== Partie 3 : TODO
