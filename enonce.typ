@@ -4,6 +4,7 @@
   set text(font: "New Computer Modern", lang: "fr")
   set par(justify: true)
 
+  show list: set block(below: 1pt)
   show math.equation: set text(weight: 400)
   show raw.where(block: false): box.with(
     fill: luma(240),
@@ -76,74 +77,77 @@ et utiliser la méthode des
 
 #pagebreak()
 
-== Partie 2 : Un réseau neuronal basique
-Dans cette partie on va toujours utiliser l'image sous forme d'une matrice _*m*_,
+== Partie 2 : Base d'un réseau neuronal
+Dans cette partie on va toujours utiliser l'image comme une matrice _*m*_,
 et on va vouloir calculer à partir de cette matrice un vecteur de taille 10, 
 $bold(p) = mat(p_0, p_1, ..., p_8, p_9;)$,
 où $p_n in [0, 1]$ représente la probabilité que $n$ soit le chiffre de l'image. \
 Pour ça on va utiliser deux matrices, 
-une matrice de poids _*W*_ de la forme $(bold(l) dot.op bold(h), 10)$, 
+une matrice de poids _*W*_ de la forme $(bold(l) dot.op bold(h), 10)$ 
 et une matrice de biais _*b*_ de la forme $(1, 10)$. \
 
 1. On peut utiliser le module ```python random``` de la librairie ```python numpy```
   pour initialiser *W* et *b* avec des distributions aléatoires, 
-  par exemple une distribution uniforme entre -1 et 1, à vous de trouver le mieux.
+  par exemple une distribution uniforme entre -1 et 1, à vous de trouver la meilleure.
 
-Vous pouvez remarquer qu'en faisant $bold(p) = bold(m) dot.op bold(W) + bold(b)$
+Vous pouvez remarquer qu'en utilisant l'application affine 
+$bold(p) = bold(m) dot.op bold(W) + bold(b)$
 on peut obtenir la forme voulue. 
 
 2. On fait donc une fonction pour calculer ce résultat, 
   on pensera à faire attention à la forme de la matrice de sortie.
 
 Mais il y a deux problèmes, d'abord les valeurs de *p* ne sont pas dans l'intervalle $[0, 1]$,
-et en plus en faisant ce calcul *W* et *b* ne nous apportent aucune information. 
+et dans ce calcul *W* et *b* ne nous apportent pour l'instant aucune information. 
 
 3. Pour régler le premier problème, on peut utiliser la fonction 
   #link("https://fr.wikipedia.org/wiki/Sigmo%C3%AFde_(math%C3%A9matiques)")[#text("sigmoïde", fill: blue)]
   dont l'expression est $sigma(x) = 1 / (1 + e^(-x))$
+  et l'appliquer à nos prédictions *p*.
 
-Pour régler le deuxième problème il va falloir que notre programme apprenne de ses erreurs.
+Pour le deuxième problème il va falloir que notre réseau apprenne de ses erreurs.
 Pour ça on va utiliser une 
 #link("https://fr.wikipedia.org/wiki/Fonction_objectif")[#text("fonction objectif", fill: blue)],
-cette fonction permet d'évaluer la qualité de nos prédictions, 
-et on modifiera nos poids *W* et nos biais *b* en fonction.
+ce type de fonction permet d'évaluer la qualité de nos prédictions, 
+et on modifiera nos paramètres *W* et *b* en se basant sur sa dérivée. \
+(Remarque : on s'intéresse à la dérivée car le but est de trouver un minimum,
+ce qui revient à avoir fait une bonne prédiction)
 
 4. Ici on va utiliser la fonction d'#link("https://fr.wikipedia.org/wiki/Erreur_quadratique_moyenne")[#text("erreur quadratique moyenne", fill: blue)],
-  pour faire simple ce qui nous intéresse est sa dérivée
-  $Delta(bold(p)) = bold(p) - mat(..., 0, 1, 0, ...;)$ 
-  avec le 1 à l'indice $n$, le chiffre à prédire. 
-  Après l'avoir implémenter, on pourra propager le résultat en arrière pour ajuster *W* et *b*.
+  pour faire simple sa dérivée est
+  $Delta(bold(p)) = bold(p) - mat(0, ..., 0, 1, 0, ..., 0;)$ 
+  avec le 1 à l'indice $n$, où $n$ est le chiffre à prédire. 
+  Vous pourrez essayer d'en trouver une meilleure.
+  
+Après l'avoir implémenter, on veut propager le résultat $Delta$ 
+en retournant en arrière dans notre réseau neuronal. 
 
-Pour apprendre en évitant de faire trop de calculs, 
-on fait un certains nombre de prédictions pour des matrices $bold(m_k)$
-pour lesquels on calcule $Delta_k$ avant de définir $Delta bold(W)$ et $Delta bold(b)$ comme suit :
-$ Delta bold(W) &= sum_(k=1)^10 bold(m_k)^t dot.op Delta_k \
-  Delta bold(b) &= sum_(k=1)^10 Delta_k $
-Ici on a fait 10 prédictions, avec $bold(m_k)^t$ la transposée.
+5. Pour ça on fait une fonction qui calcule la dérivée de la fonction sigmoïde,
+  l'applique à $bold(m) dot.op bold(W) + bold(b)$ 
+  et multiplie $Delta$ par le résultat terme à terme. \   
+  (Remarque : si on voulait retourner plus en arrière 
+  on pourrait continuer avec la dérivée de l'application affine
+  $bold(m) dot.op bold(W) + bold(b)$)
 
-5. Ainsi pour revenir en arrière on fait une fonction qui 
-  multiplie d'abord chaque terme de $Delta_k$ 
-  par ceux de la *dérivée* de la fonction sigmoïde appliquée à $bold(m_k) dot.op bold(W) + bold(b)$,   
-  puis ajoute respectivement $bold(m_k)^t dot.op Delta_k$ et $Delta_k$  
-  à $Delta bold(W)$ et $Delta bold(b)$.
+Tout en propageant le résultat, on veut aussi améliorer *W* et *b*, 
+on va pouvoir utiliser le $Delta$ que l'on a calculé.
 
-6. Ensuite on peut faire une fonction pour mettre à jour *W* et *b* 
-  en leur soustrayant respectivement $alpha dot.op Delta bold(W)$ et $alpha dot.op Delta bold(b)$,
-  où $alpha$ représente la *vitesse d'apprentissage* (on pourra prendre un nombre entre 0 et 1)
+6. On crée une fonction pour modifier nos deux paramètres : 
+  - Le changement $Delta bold(b)$ que reçoit *b* est simplement $alpha dot.op Delta$
+  - Le changement $Delta bold(W)$ que l'on fait à *W* est donné par $alpha dot.op bold(m)^t dot.op Delta$
+  Où $alpha$ représente la *vitesse d'apprentissage* (on pourra prendre $alpha$ entre 0 et 1),
+  et $bold(m)^t$ est la transposée (pour que le produit matriciel soit possible).
 
-7. Avec tout ça on peut faire une fonction intermédiaire pour s'entraîner sur un groupe d'images, 
-  pour chaque image
+7. Avec tout ça on peut faire une fonction intermédiaire pour s'entraîner sur une image, 
   on commence par calculer une prédiction $bold(p) = sigma(bold(m) dot.op bold(W) + bold(b))$,
-  puis on lui applique $Delta$ avant de retourner en arrière pour ajuster nos paramètres. 
+  puis on lui applique $Delta$ avant de retourner en arrière et d'ajuster nos paramètres. 
 
-#pagebreak()
-
-En répétant cette opération pour plusieurs groupes d'images 
+En répétant cette opération pour plusieurs images 
 on améliore petit à petit nos paramètres et nos prédictions deviennent meilleures.
 
-8. Pour terminer on peut donc faire une fonction qui s'entraînent sur un ensemble d'images
-  en les séparant en petits groupes, on peut répéter cet entraînement plusieurs fois 
+8. Pour terminer on peut donc faire une fonction qui s'entraînent sur un ensemble d'images, 
+  on peut répéter plusieurs fois 
   et calculer le pourcentage de réussite pour chaque génération sur des images de test.
 
-En fonction de l'ensemble de base utilisé on peut rapidement arriver à 80\~90% de prédictions réussites.
+En fonction de l'ensemble de base utilisé on peut rapidement arriver entre 80% et 90% de prédictions réussites.
 En bonus on peut essayer de sauvegarder nos paramètres *W* et *b* lorsque le pourcentage de réussite augmente.
