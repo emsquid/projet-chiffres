@@ -149,7 +149,7 @@ En répétant cette opération pour plusieurs images
 on améliore petit à petit nos paramètres et nos prédictions deviennent meilleures.
 
 8. Pour terminer on peut donc faire une fonction qui s'entraînent sur un ensemble d'images, 
-  on peut répéter plusieurs fois 
+  on peut répéter plusieurs fois en mélangeant les images
   et calculer le pourcentage de réussite pour chaque génération sur des images de test.
 
 En fonction de l'ensemble de base utilisé on peut rapidement arriver entre 80% et 90% de prédictions réussites.
