@@ -38,12 +38,14 @@ Dans toute la feuille on considére une image de largeur _*l*_ et de hauteur _*h
 + Tout d'abord on aura besoin d'une fonction pour lire cette image depuis un fichier, 
   on pourra par exemple utiliser la classe ```python Image``` de la librairie ```python PIL```. \
   (Pour l'installer : ```bash pip3 install Pillow```) 
+
 + Ensuite il faut une fonction pour passer de l'image à un objet plus simple à manipuler, 
   on pourra la représenter comme une *matrice* de pixels 
   de taille $1 times bold(l) dot.op bold(h)$, par exemple avec la librairie ```python numpy```. 
   On devra aussi transformer les couleurs en une valeur dans $[bold(0), bold(1)]$. \ 
   (Remarque : On fera attention à ce que notre matrice soit bien 
   en 2 dimensions pour pouvoir utiliser le produit matriciel correctement)
+
 + Enfin on pourra faire une fonction pour récupérer une liste contenant 
   tous les couples de référence `(image, chiffre)` depuis un répertoire. \
   (Remarque : pour lister tous les fichiers d'un répertoire on pourra utiliser 
@@ -64,9 +66,11 @@ et utiliser la méthode des
   ou une autre si vous trouvez plus intéressant. \
   (Remarque : pour les performances on pourra enlever la racine carré dans
   la formule de la distance euclidienne qui n'est pas nécessaire ici)
+
 + On fera aussi une fonction pour calculer le *produit scalaire* 
   de deux vecteurs de $[bold(0), bold(1)]^(bold(l) dot.op bold(h))$.
   Encore une fois, la formule s'applique de la même manière que dans l'espace.
+
 + Enfin on peut créer une fonction pour reconnaître un chiffre depuis une image,
   pour ça on peut trouver les *k* images parmi les références 
   dont les points sont les *moins distants*, 
@@ -75,11 +79,9 @@ et utiliser la méthode des
   On pourra comparer la méthode avec la distance et celle avec le produit scalaire
   pour voir laquelle fonctionne le mieux. \
 
-#pagebreak()
-
 == Partie 2 : Base d'un réseau neuronal
 Dans cette partie on va toujours utiliser l'image comme une matrice _*m*_,
-et on va vouloir calculer à partir de cette matrice un vecteur de taille 10, 
+et on va vouloir calculer à partir de cette matrice une matrice de taille $1 times 10$, 
 $bold(p) = mat(p_0, p_1, ..., p_8, p_9;)$,
 où $p_n in [0, 1]$ représente la probabilité que $n$ soit le chiffre de l'image. \
 Pour ça on va utiliser deux matrices, 
@@ -98,15 +100,16 @@ on peut obtenir la taille voulue pour *p*.
   on pensera à faire attention à bien utiliser le produit matriciel 
   et à la taille de la matrice de sortie.
 
-Mais il y a deux problèmes, d'abord les valeurs de *p* ne sont pas dans l'intervalle $[0, 1]$,
-et dans ce calcul *W* et *b* ne nous apportent pour l'instant aucune information. 
+Mais on a un premier problème, les valeurs de *p* ne sont pas dans l'intervalle $[0, 1]$
+et ne s'apparentent pas à des probabilités.
 
-3. Pour régler le premier problème, on peut utiliser la fonction 
+3. Pour régler ça, on peut utiliser la fonction 
   #link("https://fr.wikipedia.org/wiki/Sigmo%C3%AFde_(math%C3%A9matiques)")[#text("sigmoïde", fill: blue)]
   dont l'expression est $sigma(x) = 1 / (1 + e^(-x))$
   et l'appliquer à nos prédictions *p*.
 
-Pour le deuxième problème il va falloir que notre réseau apprenne de ses erreurs.
+En plus, dans ce calcul *W* et *b* ne nous apportent pour l'instant aucune information, 
+il va falloir que notre réseau apprenne de ses erreurs.
 Pour ça on va utiliser une 
 #link("https://fr.wikipedia.org/wiki/Fonction_objectif")[#text("fonction objectif", fill: blue)],
 ce type de fonction permet d'évaluer la qualité de nos prédictions, 
@@ -123,8 +126,7 @@ ce qui revient à avoir fait une bonne prédiction)
 Après l'avoir implémenter, on veut propager le résultat $Delta$ 
 en retournant en arrière dans notre réseau neuronal. 
 
-5. Pour ça on fait une fonction qui calcule la dérivée de la fonction sigmoïde,
-  l'applique à $bold(m) dot.op bold(W) + bold(b)$ 
+5. Pour ça on fait une fonction qui calcule la dérivée de la fonction sigmoïde en $bold(p)$ 
   et multiplie $Delta$ par le résultat terme à terme. \   
   (Remarque : si on voulait retourner plus en arrière 
   on pourrait continuer avec la dérivée de l'application affine
@@ -135,8 +137,8 @@ on va pouvoir utiliser $Delta$ que l'on a calculé.
 
 6. On crée une fonction pour modifier nos deux paramètres : 
   - Le changement que reçoit *b* est simplement $bold(b) arrow.l bold(b) - alpha dot.op Delta$
-  - Le changement que l'on fait à *W* est donné par $bold(W) arrow.l bold(W) - alpha dot.op bold(m)^t dot.op Delta$
-  Où $alpha$ représente la *vitesse d'apprentissage* (on pourra prendre $alpha$ entre 0 et 1),
+  - Le changement que reçoit *W* est donné par $bold(W) arrow.l bold(W) - alpha dot.op bold(m)^t dot.op Delta$
+  Où $alpha in [0, 1]$ représente la *vitesse d'apprentissage*,
   et $bold(m)^t$ est la transposée (pour que le produit matriciel soit possible).
 
 7. Avec tout ça on peut faire une fonction intermédiaire pour s'entraîner sur une image, 
