@@ -89,7 +89,7 @@ une matrice de poids _*W*_ de taille $bold(l) dot.op bold(h) times 10$
 et une matrice de biais _*b*_ de taille $1 times 10$. \
 
 1. On commence par initialiser *W* et *b* avec des 0, 
-  on pourrait aussi utiliser des distributions aléatoires, 
+  on pourrait aussi utiliser des distributions aléatoires,
   à vous de voir ce qui fonctionne le mieux.
 
 Vous pouvez remarquer qu'en utilisant l'application affine 
@@ -109,7 +109,7 @@ et ne s'apparentent pas à des probabilités.
   et l'appliquer à nos prédictions *p*.
 
 De plus, dans ce calcul *W* et *b* ne nous apportent pour l'instant aucune information, 
-il va falloir que notre réseau apprenne de ses erreurs pour que cela prenne du sens.
+il va falloir que notre réseau apprenne de ses erreurs pour qu'ils prennent du sens.
 Pour ça on va utiliser une 
 #link("https://fr.wikipedia.org/wiki/Fonction_objectif")[#text("fonction objectif", fill: blue)],
 ce type de fonction permet d'évaluer la qualité de nos prédictions, 
