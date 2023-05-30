@@ -84,7 +84,7 @@ Dans cette partie on va toujours utiliser l'image comme une matrice _*m*_,
 et on va vouloir calculer à partir de celle-ci une *matrice* de taille $1 times 10$, 
 $bold(p) = mat(p_0, p_1, ..., p_8, p_9;)$,
 où $p_n in [0, 1]$ représente la *probabilité* que $n$ soit le chiffre de l'image. \
-Pour ça on va utiliser deux matrices, 
+Pour ça on va utiliser deux matrices paramètres, 
 une matrice de poids _*W*_ de taille $bold(l) dot.op bold(h) times 10$ 
 et une matrice de biais _*b*_ de taille $1 times 10$. \
 
@@ -103,31 +103,32 @@ on peut obtenir la taille voulue pour *p*.
 Mais on a un problème, les valeurs de *p* ne sont pas dans l'intervalle $[0, 1]$
 et ne s'apparentent pas à des probabilités.
 
-3. Pour régler ça, on peut utiliser la fonction 
+3. On va utiliser la fonction 
   #link("https://fr.wikipedia.org/wiki/Sigmo%C3%AFde_(math%C3%A9matiques)")[#text("sigmoïde", fill: blue)]
-  dont l'expression est $sigma(x) = 1 / (1 + e^(-x))$
-  et l'appliquer à nos prédictions *p*.
+  dont l'expression est $sigma : x arrow.r.bar 1 / (1 + e^(-x)) in [0, 1]$
+  et l'appliquer à notre matrice *p* pour la rendre correcte.
 
 De plus, dans ce calcul *W* et *b* ne nous apportent pour l'instant aucune information, 
 il va falloir que notre réseau apprenne de ses erreurs pour qu'ils prennent du sens.
 Pour ça on va utiliser une 
 #link("https://fr.wikipedia.org/wiki/Fonction_objectif")[#text("fonction objectif", fill: blue)],
 ce type de fonction permet d'évaluer la qualité de nos prédictions, 
-et on modifiera nos paramètres *W* et *b* en se basant sur sa dérivée. \
+et on modifiera nos paramètres en se basant sur sa dérivée. \
 (Remarque : on s'intéresse à la dérivée car le but est de trouver un minimum,
 ce qui revient à avoir fait une bonne prédiction)
 
 4. Ici on va utiliser la fonction d'#link("https://fr.wikipedia.org/wiki/Erreur_quadratique_moyenne")[#text("erreur quadratique moyenne", fill: blue)],
-  pour faire simple sa dérivée est
-  $Delta(bold(p)) = bold(p) - mat(0, ..., 0, 1, 0, ..., 0;)$ 
+  pour faire simple sa dérivée est donnée par
+  $bold(p) arrow.r.bar bold(p) - mat(0, ..., 0, 1, 0, ..., 0;)$ 
   avec le 1 à l'indice $n$, où $n$ est le chiffre à prédire. 
   Vous pourrez essayer d'en trouver une meilleure.
   
-Après l'avoir implémenter, on veut propager le résultat $Delta$ 
+Après l'avoir implémenter, on veut propager le résultat 
 en retournant en arrière dans notre réseau neuronal. 
 
-5. Pour ça on fait une fonction qui calcule la dérivée de la fonction sigmoïde en $bold(p)$ 
-  et multiplie $Delta$ par le résultat terme à terme. \   
+5. Pour ça on multiplie le résultat précédent par 
+  la dérivée de la fonction sigmoïde en $bold(p)$, terme à terme,
+  on appelle ce produit $Delta$. \   
   (Remarque : si on voulait retourner plus en arrière 
   on pourrait continuer avec la dérivée de l'application affine
   $bold(m) dot.op bold(W) + bold(b)$)
@@ -136,8 +137,8 @@ Tout en propageant le résultat, on veut aussi améliorer *W* et *b*,
 on va pouvoir utiliser $Delta$ après l'avoir calculé.
 
 6. On crée une fonction pour modifier nos deux paramètres : 
-  - Le changement que reçoit *b* est simplement $bold(b) arrow.l bold(b) - alpha dot.op Delta$
-  - Le changement que reçoit *W* est donné par $bold(W) arrow.l bold(W) - alpha dot.op bold(m)^t dot.op Delta$
+  - Le changement que reçoit *W* est $bold(W) arrow.r.bar bold(W) - alpha dot.op bold(m)^t dot.op Delta$
+  - Le changement que reçoit *b* est simplement $bold(b) arrow.r.bar bold(b) - alpha dot.op Delta$
   Où $alpha in [0, 1]$ représente la *vitesse d'apprentissage*,
   et $bold(m)^t$ est la transposée (pour que le produit matriciel soit possible).
 
