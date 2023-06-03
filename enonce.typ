@@ -123,7 +123,7 @@ ce qui revient à avoir fait une bonne prédiction)
   avec le 1 à l'indice $n$, où $n$ est le chiffre à prédire. 
   Vous pourrez essayer d'en trouver une meilleure.
   
-Après l'avoir implémenter, on veut propager le résultat 
+Après l'avoir implémenté, on veut propager le résultat 
 en retournant en arrière dans notre réseau neuronal. 
 
 5. Pour ça on multiplie le résultat précédent par 
@@ -156,4 +156,54 @@ on améliore petit à petit nos paramètres et nos prédictions deviennent meill
 En fonction de l'ensemble de base utilisé on peut rapidement arriver entre 80% et 90% de prédictions réussites.
 En bonus on peut essayer de sauvegarder nos paramètres *W* et *b* lorsque le pourcentage de réussite augmente.
 
-== Partie 3 : TODO
+== Partie 3 : Système neuronal séquentiel
+
+Dans cette troisième partie, nous allons produire un système neuronal séquentiel, c'est à dire que chaque neurone aura un unique prédécesseur et successeur. À la fin, notre système neuronal ressemblera à quelque chose comme ça : 
+
+Notre fichier final comprendra deux classes, le système neuronal et les neurones. Pour éviter toute copie, vous pouvez copier-coller les fonctions suivantes : la sigmoïde et sa dérivée ainsi que les fonction pour récupérer les images d'entrainement, celle qui génère l'erreur quadratique moyenne.
+Nous allons nous attaquer à la class Neurone puis ensuite au système neuronal.
+
+1. Créons une classe *Neurone*, avec une méthode permettant de connecter ce neurone avec son précédent. Cela permettra de les lier et de récupérer les données du suivant ou du précédent.
+
+2. Lors de l'initialisation de notre Neuron, nous créerons un matrice de poids *W* de taille _entree_dim_ $times$ _sortie_dim_ et une matrice de bias de taille $1 times$ _sortie_dim_, où _entree_dim_ et _sortie_dim_ seront donnés en paramètres. Ces matrices seront remplis de valeurs aléatores comprises entre -1 et 1.
+
+Notre neurone possédera deux matrices bien distintes, une matrice de sortie et une d'entrée.
+
+3. Ainsi, pour faciliter les prochaines exécution, nous pouvons crée une méthode _recupere_sortie_precedente_ qui retournera la sortie du neurone précédent. À vous de traiter le cas où le neuron en question est le premier neurone. La matrice de sortie aura la même taille que le bias, cependant la matrice d'entrée sera de taille $1 times$ _entree_dim_.
+
+Vous pouvez remarquer qu'en multipliant notre matrice *W* avec la matrice d'entrée (qui est un field de la classe), nous retombons sur une matrice de taille $1 times$ _sortie_dim_.
+
+4. Cette question est une adaption de la question 3 de la partie 2, en suivant l'explication précédente, nous pouvons créer une fonction *forward* qui fait cette opération en y ajoutant la matrice bias. Or les valeurs obtenus ne sont pas dans l'intervalle [0, 1]. Il va donc falloir appliquer vous savez quelle fonction au résultat prédécent, ce sera la donnée de sortie de notre neuron.
+
+Dans les prochaines questions nous allons nous attaquer à l'apprentisage de notre système neuronal
+
+5. Dans un premier temps, nous pouvons créer notre classe avec comme seule variable notre liste de neurones. Nous pouvons également créer une méthode permettant d'ajouter un neurone au système neuronal et de le lier au dernier.
+
+6. Nous pouvons par la suite, implémenter une méthode entrainant notre système neuronal sur une image, elle prendra comme paramètre un tuple contenant notre image sous forme de matrice $1 times 784$ avec le nombre associé à l'image, et la vitesse d'apprentissage. Au sein de cette fonction, nous donnerons à notre premier neurone notre image comme entrée, puis on appellera forward pour chaque neurone.
+
+Une fois que les données de l'image sont passés ??? dans tous nos neurones, il va falloir que notre système neuronal apprenne.
+
+7. Ainsi, nous pouvons utiliser la fonction d'erreur quadratique moyenne, pour évaluer la prédiction du nombre.
+
+Après avoir ajouté cette fonction à votre code, il nous faut propager l'erreur dans l'ensemble de nos neurones.
+
+8. Ainsi, nous pouvons créer une nouvelle variable _entree_delta_ dans notre classe Neurone. La valeur de cette variable pour notre dernier neurone sera l'erreur quadratique moyenne évaluée en la sortie du denrier neurone. 
+
+Maintenant que nous avons implémenté le calcul du manque de prédictions, nous devons remonter notre système neuronales.
+
+//9. À la suite de la fonction du 6, nous pouvons appeler pour chacun des neurones dans le sens inverse la fonction backward :
+
+10. Cette fonction backward dépendra de la vitesse d'apprentissage $alpha$ , elle permettra également de modifier les poids de chancun de nos neurones de manière à ce qu'ils soient plus précis. Pour cela, nous aurons besoin du delta $Delta$ précédemment calculé ainsi que de la sortie *d* du neurone précédent (self.precedent), il sera ensuite indipensable de modifier ce delta en multipliant avec la dérivée de la sigmoïde de la sortie du neuron précédent. Nous allons ensuite modifier les variables de notre neurone de la manioère suivante : 
+ - $Delta$s $<- Delta dot.op bold(W)^t $
+ - $bold(W) <- bold(W) - alpha dot.op $*d*$ dot.op Delta$
+ - *b* $<-$ *b* $ - alpha dot.op Delta$
+
+
+
+
+
+Ne pas donner un unique image mais plusieurs
+
+
+
+
