@@ -194,30 +194,35 @@ nous retombons sur une matrice de taille $1 times$ _sortie_dim_.
 
 Dans les prochaines questions nous allons nous concentrer sur l'apprentisage de notre Réseau neuronal.
 
-5. Dans un premier temps, nous pouvons créer notre classe avec comme seule variable notre liste de neurones. 
+5. Dans un premier temps, nous pouvons créer notre classe *ReseauNeuronal* avec comme seule variable notre liste de neurones. 
   Nous pouvons également ajouter une méthode permettant d'ajouter un neurone au système neuronal et de le lier au dernier.
 
 6. Nous pouvons par la suite, implémenter une méthode entrainant notre système neuronal sur une image, 
   elle prendra comme paramètre notre image, le nombre associé à l'image, et la vitesse d'apprentissage $alpha$. 
-  Au sein de cette fonction, nous donnerons à notre premier neurone notre image comme entrée, puis on procédera pour chaque neurone.
+  Au sein de cette fonction, nous donnerons à notre premier neurone notre image comme entrée, puis on fera en sorte que notre image parcourt l'ensemble de notre réseau neuronal.
 
-Une fois que l'image a été procédé par tous nos neurones, il va falloir évaluer le résultat et retourner en arrière.
+Une fois que l'image a été analysé par tous nos neurones, il va falloir évaluer le résultat et retourner en arrière.
 
-7. Ainsi, nous pouvons créer une nouvelle variable _entree_delta_ dans notre classe Neurone. 
+7. Ainsi, nous pouvons créer une nouvelle variable _entree_delta_ dans notre classe *Neurone*. Cette variable correspondra à l'erreur quadratique moyenne du neurone suivant (dans le sens de l'input)
   La valeur de cette variable pour notre dernier neurone sera l'erreur quadratique moyenne évaluée en sa sortie. 
 
-8. À la suite de la fonction du 6, nous pouvons appeler pour chacun des neurones dans le sens inverse la fonction backward :
+8. À la suite de la fonction du 6, nous pouvons appeler pour chacun des neurones dans le sens inverse la fonction _backward_ :
 
-9. Cette fonction backward dépendra de la vitesse d'apprentissage $alpha$, 
-  elle permettra également de modifier les paramètres de chacun de nos neurones de manière à ce qu'ils soient plus précis. 
+9. Cette fonction _backward_ dépendra de la vitesse d'apprentissage $alpha$, pour pouvoir bien définir cette fonction, nous devons utiliser la réciproque de la fonction sigmoïdale.
+  Évidemment, nous n'allons pas vous la donner. Allez, on sort ses feuilles et au travail !!
+  Cette fonction permettra également de modifier les paramètres de chacun de nos neurones de manière à ce qu'ils soient plus précis. 
   Pour cela, nous aurons besoin du delta $Delta$ précédemment calculé ainsi que de la sortie *p* du neurone, 
-  il sera ensuite indispensable de modifier ce delta en multipliant avec la dérivée de la sigmoïde de la sortie du neurone précédent. 
+  il sera ensuite indispensable de modifier ce delta en le multipliant par la dérivée de la sigmoïde de la sortie du neurone précédent. 
   Nous allons ensuite appliquer les changements suivants à notre neurone : 
   - $bold(W) arrow.r.bar bold(W) - alpha dot.op bold(p) dot.op Delta$
   - $bold(b) arrow.r.bar bold(b) - alpha dot.op Delta$
   - $Delta s arrow.r.bar Delta dot.op bold(W)^t$
 
-Ne pas donner un unique image mais plusieurs ???
+10. Dans cette avant dernière question de la partie 3, nous allons créer une fonction _train_ qui prendra en paramètre les images d'entraînement sous forme de tuple, le nombre génération à passer, la vitesse d'apprentissage et les images de test afin de voir l'avancé de notre réseau neuronal. Il serait très certainement intéressant de reprendre les fonctions que vous avez effectué dans la partie 2.
+
+11. Dans cette dernière question, vous pouvez initialiser votre réseau neuronal, y ajouter des neurones (attention aux dimensions de sortie et d'entrée), et ensuite l'entraîner sur le jeu de donnée que nous vous avons fourni.
+
+Note: Si jamais vous ajoutez un unique neurone, le résultat sera très similaire à la partie 2. Cependant, ajouter plusieurs neurones prendra plus de temps au niveau de l'entraînement, mais au contraire, le changement des paramètres dans l'ensemble du réseau neuronal sera moins important, ce qui permettra une meilleure précision.
 
 
 
