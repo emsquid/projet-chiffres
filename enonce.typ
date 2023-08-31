@@ -209,14 +209,14 @@ Une fois que l'image a été analysé par tous nos neurones, il va falloir éval
 8. À la suite de la fonction du 6, nous pouvons appeler pour chacun des neurones dans le sens inverse la fonction _backward_ :
 
 9. Cette fonction _backward_ dépendra de la vitesse d'apprentissage $alpha$, pour pouvoir bien définir cette fonction, nous devons utiliser la réciproque de la fonction sigmoïdale.
-  Évidemment, nous n'allons pas vous la donner. Allez, on sort ses feuilles et au travail !!
+  Évidemment, nous n'allons pas vous la donner. Allez, on sort ses feuilles et au travail !! \
   Cette fonction permettra également de modifier les paramètres de chacun de nos neurones de manière à ce qu'ils soient plus précis. 
   Pour cela, nous aurons besoin du delta $Delta$ précédemment calculé ainsi que de la sortie *p* du neurone, 
   il sera ensuite indispensable de modifier ce delta en le multipliant par la dérivée de la sigmoïde de la sortie du neurone précédent. 
-  Nous allons ensuite appliquer les changements suivants à notre neurone : 
+  Nous allons ensuite appliquer les changements suivants à notre neurone en respectant l'ordre : 
+  - $Delta s arrow.r.bar Delta dot.op bold(W)^t$ (qui correspond au delta de sortie du neurone actuel)
   - $bold(W) arrow.r.bar bold(W) - alpha dot.op bold(p) dot.op Delta$
   - $bold(b) arrow.r.bar bold(b) - alpha dot.op Delta$
-  - $Delta s arrow.r.bar Delta dot.op bold(W)^t$
 
 10. Dans cette avant dernière question de la partie 3, nous allons créer une fonction _train_ qui prendra en paramètre les images d'entraînement sous forme de tuple, le nombre génération à passer, la vitesse d'apprentissage et les images de test afin de voir l'avancé de notre réseau neuronal. Il serait très certainement intéressant de reprendre les fonctions que vous avez effectué dans la partie 2.
 
